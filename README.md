@@ -1,1 +1,1 @@
-# dvc-getting-started-guide
+# Getting started with DVC
