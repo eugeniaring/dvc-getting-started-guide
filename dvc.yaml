@@ -1,0 +1,25 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - data/raw
+    - src/config/config_path.py
+    outs:
+    - data/preprocessed
+  train:
+    cmd: python src/train.py
+    deps:
+    - data/preprocessed
+    - src/config/config_path.py
+    params:
+    - split.ratio
+    outs:
+    - model
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - data/preprocessed
+    - model/catboost.pickle
+    metrics:
+    - evaluation/metrics.json:
+        cache: false
