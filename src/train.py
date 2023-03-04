@@ -1,11 +1,10 @@
 import pandas as pd
 import numpy as np
+
 from sklearn.model_selection import train_test_split
 from config.config_path import PATHS,cb_features
-from preprocess import change_dtype
 from catboost import CatBoostRegressor
 import pickle
-from preprocess import split
 from dvc.api import params_show
 
 def split(df,test_size):
@@ -21,7 +20,7 @@ if __name__ == "__main__":
     change_dtype(df)
     print(df.info())
     #print(list(df.columns))
-    X_train, X_test, y_train, y_test = split(df,test_size=params_show()['split'])
+    X_train, X_test, y_train, y_test = split(df,test_size=params_show()['split']['ratio'])
     categorical_indices = np.where(df.dtypes=='object')[0]
     categorical_indices = categorical_indices.tolist()
     print(categorical_indices)
