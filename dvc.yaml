@@ -5,20 +5,20 @@ stages:
     - data/raw
     - src/config/config_path.py
     outs:
-    - data/preprocessed
+    - data/preprocessed/hour.parquet
   train:
     cmd: python src/train.py
     deps:
-    - data/preprocessed
+    - data/preprocessed/hour.parquet
     - src/config/config_path.py
     params:
     - split.ratio
     outs:
-    - model
+    - model/catboost.pickle
   evaluate:
     cmd: python src/evaluate.py
     deps:
-    - data/preprocessed
+    - data/preprocessed/hour.parquet
     - model/catboost.pickle
     metrics:
     - evaluation/metrics.json:
