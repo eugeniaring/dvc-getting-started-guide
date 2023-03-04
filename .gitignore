@@ -1,5 +1,5 @@
 venv/*
-data/*
 model/*
+data/
 __pycache__
 /data
