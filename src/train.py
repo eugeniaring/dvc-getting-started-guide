@@ -1,34 +1,54 @@
 import pandas as pd
 import numpy as np
 
-from sklearn.model_selection import train_test_split
-from config.config_path import PATHS,cb_features
 from catboost import CatBoostRegressor
+from sklearn.metrics import mean_absolute_error
 import pickle
 from dvc.api import params_show
+import json
 
-def split(df,test_size):
-    X,y = df[cb_features['feature_names']],df[cb_features['target'][0]]
-    return train_test_split(X,y,test_size=test_size,random_state=123) 
+def read_file(path):
 
-def change_dtype(df):
-    for c in ['season','yr','mnth','hr','holiday','weekday','workingday','weathersit']:
-        df[c] = df[c].astype('object')
+	with open(path, 'rb') as fp:
+		f = pickle.load(fp)
 
-if __name__ == "__main__":
-    df = pd.read_parquet(PATHS['preprocessed_data'])
-    change_dtype(df)
-    print(df.info())
-    #print(list(df.columns))
-    X_train, X_test, y_train, y_test = split(df,test_size=params_show()['split']['ratio'])
-    categorical_indices = np.where(df.dtypes=='object')[0]
+	return f
+
+def train_catboost(data):
+    X_train,y_train = data 
+    categorical_indices = np.where(X_train.dtypes=='object')[0]
     categorical_indices = categorical_indices.tolist()
-    print(categorical_indices)
     cb = CatBoostRegressor(n_estimators=200,
-                       loss_function='RMSE',
-                       learning_rate=0.1,
-                       depth=8, task_type='CPU',
-                       random_state=1,
-                       verbose=False)
+                        loss_function='RMSE',
+                        learning_rate=0.1,
+                        depth=8, task_type='CPU',
+                        random_state=1,
+                        verbose=False)
     cb.fit(X_train, y_train,cat_features=categorical_indices)
     pickle.dump(cb,open("model/catboost.pickle",'wb'))
+    return cb
+
+def eval_catboost(data,cb):
+    X_train, X_test, y_train, y_test = data
+    y_pred_train = cb.predict(X_train)
+    y_pred = cb.predict(X_test)
+
+    print('train MAE: ',mean_absolute_error(y_train,y_pred_train))
+    print('test MAE: ',mean_absolute_error(y_test,y_pred))
+
+    diz_eval = {'train_mae':mean_absolute_error(y_train,y_pred_train),
+                'test_mae':mean_absolute_error(y_test,y_pred)}
+    with open('evaluation/metrics.json', "w") as fd:
+        json.dump(diz_eval,fd,indent=4,)
+      
+
+if __name__ == "__main__":
+    PATHS = params_show()['PATHS']
+    X_train = read_file(PATHS['features']['train'])
+    X_test = read_file(PATHS['features']['test'])
+    y_train = read_file(PATHS['target']['train'])
+    y_test = read_file(PATHS['target']['test'])
+
+    cb = train_catboost((X_train,y_train))
+    eval_catboost((X_train, X_test, y_train, y_test),cb)
+

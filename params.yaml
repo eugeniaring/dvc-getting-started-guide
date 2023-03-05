@@ -1,2 +1,16 @@
+PATHS:
+  raw_data: data/raw/hour.csv
+  preprocessed_data: data/preprocessed/hour.parquet
+  features: 
+    train: data/train/x_train.txt
+    test: data/test/x_test.txt
+  target: 
+    train: data/train/y_train.txt
+    test: data/test/y_test.txt 
+
+cb_features:
+  target: 'cnt'
+  feature_names: ['season', 'yr', 'mnth', 'hr', 'holiday', 'weekday', 'workingday', 'weathersit', 'temp', 'hum', 'windspeed']
+
 split:
   ratio: 0.2
