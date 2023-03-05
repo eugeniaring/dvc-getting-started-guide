@@ -3,14 +3,12 @@ stages:
     cmd: python src/preprocess.py
     deps:
     - data/raw
-    - src/config/config_path.py
     outs:
     - data/preprocessed/hour.parquet
   train:
     cmd: python src/train.py
     deps:
     - data/preprocessed/hour.parquet
-    - src/config/config_path.py
     params:
     - split.ratio
     outs:
