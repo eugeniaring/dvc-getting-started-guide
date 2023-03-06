@@ -4,23 +4,24 @@ stages:
     deps:
     - data/raw
     outs:
-    - data/preprocessed
+    - data/preprocessed/hour_clean.csv
   split:
     cmd: python src/split.py
     deps:
-    - data/preprocessed
+    - data/preprocessed/hour_clean.csv
     - src/preprocess.py
     params:
     - split.ratio
     outs:
-    - data/test
-    - data/train
-    - model
+    - data/preprocessed/test.csv
+    - data/preprocessed/train.csv
   train:
     cmd: python src/train.py
     deps:
-    - data/test
-    - data/train
+    - data/preprocessed/test.csv
+    - data/preprocessed/train.csv
+    outs:
+    - model/catboost.pickle
     metrics:
     - evaluation/metrics.json:
         cache: false
