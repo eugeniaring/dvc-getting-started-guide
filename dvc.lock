@@ -8,53 +8,41 @@ stages:
       size: 1156736
       nfiles: 1
     outs:
-    - path: data/preprocessed/hour.parquet
-      md5: da14fdc237235aaea4d59dc85a2b3cc4
-      size: 206096
+    - path: data/preprocessed/hour_clean.csv
+      md5: 2ff039c43fbc37224e56877cfd8ea9f4
+      size: 634940
   split:
     cmd: python src/split.py
     deps:
-    - path: data/preprocessed/hour.parquet
-      md5: da14fdc237235aaea4d59dc85a2b3cc4
-      size: 206096
+    - path: data/preprocessed/hour_clean.csv
+      md5: 2ff039c43fbc37224e56877cfd8ea9f4
+      size: 634940
     - path: src/preprocess.py
-      md5: 9261261c0506bbfdb87312bc2353f4bf
-      size: 760
+      md5: 9fbf189d78a0851c5cbb3ea2fb3c4d70
+      size: 772
     params:
       params.yaml:
         split.ratio: 0.2
     outs:
-    - path: data/test/x_test.txt
-      md5: ebf333be23a9be524f4307f91afae8d3
-      size: 167760
-    - path: data/test/y_test.txt
-      md5: c183da3e16ef59b69c0bea40b2108eae
-      size: 84083
-    - path: data/train/x_train.txt
-      md5: dd04314e062f76877b1fe7ec9855cce5
-      size: 668460
-    - path: data/train/y_train.txt
-      md5: 14e3a09cc8e922eecca0279a3451049e
-      size: 334349
+    - path: data/preprocessed/test.csv
+      md5: c93b9b38dc9208314aef0ec6d73d316b
+      size: 127064
+    - path: data/preprocessed/train.csv
+      md5: ddde0db611cf8e4d7e1992f6f7b83fd7
+      size: 507955
   train:
     cmd: python src/train.py
     deps:
-    - path: data/test/x_test.txt
-      md5: ebf333be23a9be524f4307f91afae8d3
-      size: 167760
-    - path: data/test/y_test.txt
-      md5: c183da3e16ef59b69c0bea40b2108eae
-      size: 84083
-    - path: data/train/x_train.txt
-      md5: dd04314e062f76877b1fe7ec9855cce5
-      size: 668460
-    - path: data/train/y_train.txt
-      md5: 14e3a09cc8e922eecca0279a3451049e
-      size: 334349
+    - path: data/preprocessed/test.csv
+      md5: c93b9b38dc9208314aef0ec6d73d316b
+      size: 127064
+    - path: data/preprocessed/train.csv
+      md5: ddde0db611cf8e4d7e1992f6f7b83fd7
+      size: 507955
     outs:
     - path: evaluation/metrics.json
-      md5: 8fd91d1c8eb335802d2b097c527873a9
-      size: 74
+      md5: dee340cd3d0ce9c9ca8fe0bb1cb1fa93
+      size: 75
     - path: model/catboost.pickle
-      md5: 455caba0dbce1814401671e380c2a389
-      size: 1376210
+      md5: fdaaca737248f89219cc6f3c3621f83b
+      size: 841410
