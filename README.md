@@ -23,7 +23,9 @@ The article with the explanations is [Getting started with DVC]()
 
 1. Clone the template branch:
 
-```git clone --branch template https://github.com/eugeniaring/dvc-getting-started-guide.git```
+```
+git clone --branch template https://github.com/eugeniaring/dvc-getting-started-guide.git
+```
 
 2. Create a virtual environment:
 
