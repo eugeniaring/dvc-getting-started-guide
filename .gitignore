@@ -1,5 +1,7 @@
 venv/*
 model/*
-data/
+data/*
 __pycache__
 /data
+/model
+catboost_info
