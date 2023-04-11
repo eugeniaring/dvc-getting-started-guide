@@ -1,13 +1,9 @@
 PATHS:
   raw_data: data/raw/hour.csv
-  preprocessed_data: data/preprocessed/hour.parquet
-  features: 
-    train: data/train/x_train.txt
-    test: data/test/x_test.txt
-  target: 
-    train: data/train/y_train.txt
-    test: data/test/y_test.txt 
-
+  preprocessed_data: data/preprocessed/hour_clean.csv
+  train: data/preprocessed/train.csv
+  test: data/preprocessed/test.csv
+  
 cb_features:
   target: 'cnt'
   feature_names: ['season', 'yr', 'mnth', 'hr', 'holiday', 'weekday', 'workingday', 'weathersit', 'temp', 'hum', 'windspeed']
