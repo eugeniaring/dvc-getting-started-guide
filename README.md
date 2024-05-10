@@ -7,7 +7,7 @@ In this tutorial, we are going to master the principal commands and create a dat
 
 ## Detailed description of the project
 
-The article with the explanations is [Getting started with DVC]()
+The article with the explanations is [Getting started with DVC](https://dagshub.com/blog/getting-started-with-dvc/)
 
 ## Project Structure
 
